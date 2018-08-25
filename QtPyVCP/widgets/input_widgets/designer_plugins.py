@@ -48,3 +48,9 @@ from jog_increment import JogIncrementWidget
 class JogIncrementPlugin(_DesignerPlugin):
     def pluginClass(self):
         return JogIncrementWidget
+
+from console_widget.wrapper import Wrapper
+
+class PythonInterpreterPlugin(_DesignerPlugin):
+    def pluginClass(self):
+        return Wrapper

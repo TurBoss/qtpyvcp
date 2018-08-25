@@ -20,7 +20,11 @@
      <height>624</height>
     </size>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout"/>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="Wrapper" name="wrapper"/>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -28,7 +32,7 @@
      <x>0</x>
      <y>0</y>
      <width>532</width>
-     <height>20</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -81,6 +85,11 @@
    <extends>QMainWindow</extends>
    <header>QtPyVCP.widgets.form_widgets.main_window</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Wrapper</class>
+   <extends>QTextEdit</extends>
+   <header>QtPyVCP.widgets.input_widgets.console_widget.wrapper</header>
   </customwidget>
  </customwidgets>
  <resources/>
