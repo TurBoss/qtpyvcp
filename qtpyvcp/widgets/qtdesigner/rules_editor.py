@@ -214,8 +214,8 @@ class RulesEditor(QtWidgets.QDialog):
 
         lbl_expression = QtWidgets.QLabel("Expression:")
         expr_help_layout = QtWidgets.QHBoxLayout()
-        self.txt_expression = QtWidgets.QLineEdit()
-        self.txt_expression.editingFinished.connect(self.expression_changed)
+        self.txt_expression = QtWidgets.QTextEdit()
+        self.txt_expression.textChanged.connect(self.expression_changed)
         expr_help_layout.addWidget(self.txt_expression)
         self.btn_help = QtWidgets.QPushButton()
         self.btn_help.setAutoDefault(False)
@@ -488,7 +488,7 @@ class RulesEditor(QtWidgets.QDialog):
 
     def expression_changed(self):
         """Callback executed when the expression is modified."""
-        self.change_entry("expression", self.txt_expression.text())
+        self.change_entry("expression", self.txt_expression.toPlainText())
 
     def is_data_valid(self):
         """
