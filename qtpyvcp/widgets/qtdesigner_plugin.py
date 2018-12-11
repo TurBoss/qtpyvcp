@@ -19,8 +19,6 @@ os.environ['DESIGNER'] = 'true'
 from qtpyvcp.utilities.config_loader import load_config_files_from_env
 config = load_config_files_from_env()
 
-print config
-
 from qtpyvcp.plugins import loadDataPlugins
 loadDataPlugins(config['data_plugins'])
 
