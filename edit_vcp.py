@@ -6,9 +6,6 @@ import subprocess
 
 from qtpy.QtWidgets import QApplication, QFileDialog
 
-from qtpyvcp.utilities.config_loader import load_config_files
-
-
 app = QApplication(sys.argv)
 
 options = QFileDialog.Options()
@@ -22,7 +19,13 @@ if file_name:
 ui_file = ''
 ext = os.path.splitext(file_name)[1]
 if ext == '.yml':
-    data = load_config_files(file_name).get('qtdesigner')
+    from qtpyvcp import CONFIG
+    from qtpyvcp.utilities.config_loader import load_config_files
+    CONFIG.update(load_config_files(file_name))
+    data = CONFIG.get('qtdesigner')
+
+    # add to path so that QtDesginer can load it when it starts
+    os.environ['VCP_CONFIG_FILES'] = file_name + ':' + os.getenv('VCP_CONFIG_FILES', '')
 
     if data is not None:
         yml_dir = os.path.dirname(file_name)
