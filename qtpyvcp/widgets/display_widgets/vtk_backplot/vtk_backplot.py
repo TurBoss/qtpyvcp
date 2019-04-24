@@ -113,7 +113,8 @@ class VTKBackPlot(QVTKRenderWindowInteractor, VCPWidget, BaseBackPlot):
 
         self.axis = self.stat.axis
 
-        self.nav_style = vtk.vtkInteractorStyleTrackballCamera()
+        # self.nav_style = vtk.vtkInteractorStyleTrackballCamera()
+        self.nav_style = vtk.vtkInteractorStyleMultiTouchCamera()
 
         self.camera = vtk.vtkCamera()
         self.camera.ParallelProjectionOn()
