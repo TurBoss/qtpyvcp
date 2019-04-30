@@ -116,6 +116,42 @@ class VTKBackPlot(QVTKRenderWindowInteractor, VCPWidget, BaseBackPlot):
         self.nav_style = vtk.vtkInteractorStyleTrackballCamera()
 
         self.camera = vtk.vtkCamera()
+
+        self.camera_p_view = vtk.vtkCamera()
+        self.camera_p_view.SetPosition(40, -40, 40)
+        self.camera_p_view.SetClippingRange(0.1, 40)
+        self.camera_p_view.SetViewUp(0, 0, 1)
+        self.camera_p_view.SetFocalPoint(0, 0, 0)
+        planes_array = [0 for i in range(24)]
+
+        self.camera_p_view.GetFrustumPlanes(1, planes_array)
+
+        planes = vtk.vtkPlanes()
+        planes.SetFrustumPlanes(planes_array)
+
+        frustumSource = vtk.vtkFrustumSource()
+        frustumSource.ShowLinesOn()
+        frustumSource.SetPlanes(planes)
+        frustumSource.Update()
+
+        shrink = vtk.vtkShrinkPolyData()
+        shrink.SetInputConnection(frustumSource.GetOutputPort())
+        shrink.SetShrinkFactor(.9)
+
+        mapper = vtk.vtkPolyDataMapper()
+        mapper.SetInputConnection(shrink.GetOutputPort())
+
+        colors = vtk.vtkNamedColors()
+
+        back = vtk.vtkProperty()
+        back.SetColor(colors.GetColor3d("Tomato"))
+
+        self.camera_p_view_actor = vtk.vtkActor()
+        self.camera_p_view_actor.SetMapper(mapper)
+        self.camera_p_view_actor.GetProperty().EdgeVisibilityOn()
+        self.camera_p_view_actor.GetProperty().SetOpacity(0.5)
+        self.camera_p_view_actor.GetProperty().SetColor(colors.GetColor3d("Banana"))
+
         self.camera.ParallelProjectionOn()
 
         self.renderer = vtk.vtkRenderer()
@@ -139,6 +175,7 @@ class VTKBackPlot(QVTKRenderWindowInteractor, VCPWidget, BaseBackPlot):
 
         self.path_actors = list()
 
+        self.renderer.AddActor(self.camera_p_view_actor)
         self.renderer.AddActor(self.tool_actor)
         self.renderer.AddActor(self.machine_actor)
         self.renderer.AddActor(self.axes_actor)
@@ -163,7 +200,7 @@ class VTKBackPlot(QVTKRenderWindowInteractor, VCPWidget, BaseBackPlot):
         self._last_filename = str()
 
     def tlo(self, tlo):
-        print tlo
+        print(tlo)
 
     @Slot()
     def reload_program(self, *args, **kwargs):
@@ -269,10 +306,7 @@ class VTKBackPlot(QVTKRenderWindowInteractor, VCPWidget, BaseBackPlot):
 
     @Slot()
     def setViewP(self):
-        self.renderer.GetActiveCamera().SetPosition(1, -1, 1)
-        self.renderer.GetActiveCamera().SetViewUp(0, 0, 1)
-        self.renderer.GetActiveCamera().SetFocalPoint(0, 0, 0)
-        self.renderer.ResetCamera()
+        self.renderer.SetActiveCamera(self.camera_p_view)
         self.interactor.ReInitialize()
 
     @Slot()
