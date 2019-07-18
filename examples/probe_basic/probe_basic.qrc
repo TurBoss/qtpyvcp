@@ -65,8 +65,6 @@
     <file>images/z_plus_jog_button.png</file>
     <file>images/a_plus_jog_button.png</file>
     <file>images/b_plus_jog_button.png</file>
-    <file>images/left_arrow.png</file>
-    <file>images/right_arrow.png</file>
     <file>images/ccw_arrow.png</file>
     <file>images/cw_arrow.png</file>
     <file>images/folder_up.png</file>
@@ -82,12 +80,12 @@
     <file>images/drill_dims_white.png</file>
     <file>images/up_arrow.png</file>
     <file>images/down_arrow.png</file>
+    <file>images/left_arrow.png</file>
+    <file>images/right_arrow.png</file>
     <file>images/probe_cal_round_boss.png</file>
     <file>images/probe_cal_round_pocket.png</file>
     <file>images/probe_cal_square_boss.png</file>
     <file>images/probe_cal_square_pocket.png</file>
-    <file>images/up_arrow.png</file>
-    <file>images/down_arrow.png</file>
     <file>images/backspace.png</file>
     
 </qresource>
