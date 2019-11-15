@@ -38,6 +38,10 @@ data_plugins:
   notifications:
     provider: qtpyvcp.plugins.notifications:Notifications
     kwargs:
+      # show notification popups
+      enabled: True
+      # "native" or "dbus"
+      mode: native
       # whether to save messages on exit
       persistent: True
       # where to save, relative to config dir
@@ -77,3 +81,10 @@ application:
   provider: qtpyvcp.application:VCPApplication
   kwargs:
 #    stylesheet: {{ file.dir }}/widgets/default_stylesheet.qss   # application wide stylesheet
+
+settings:
+  touch-probe.diameter-offset:
+    default_value: 0.0
+    persistent: true
+    min_value: 0
+    max_value: 1
