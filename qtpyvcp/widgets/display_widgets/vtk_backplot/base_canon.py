@@ -29,7 +29,7 @@ class BaseCanon(object):
         self.dwell_time = 0
 
         self.seq_num = -1
-        self.last_pos = (0,) * 9
+        self.lo = (0,) * 9
 
         self.first_move = True
         self.in_arc = False
@@ -168,9 +168,9 @@ class BaseCanon(object):
 
     def tool_offset(self, xo, yo, zo, ao, bo, co, uo, vo, wo):
         self.first_move = True
-        x, y, z, a, b, c, u, v, w = self.last_pos
+        x, y, z, a, b, c, u, v, w = self.lo
 
-        self.last_pos = (
+        self.lo = (
             x - xo + self.tlo_x, y - yo + self.tlo_y, z - zo + self.tlo_z,
             a - ao + self.tlo_a, b - bo + self.tlo_b, c - bo + self.tlo_b,
             u - uo + self.tlo_u, v - vo + self.tlo_v, w - wo + self.tlo_w)
@@ -208,9 +208,9 @@ class BaseCanon(object):
 
         pos = self.rotate_and_translate(x, y, z, a, b, c, u, v, w)
         if not self.first_move:
-            self.add_path_point('traverse', self.last_pos, pos)
+            self.add_path_point('traverse', self.lo, pos)
 
-        self.last_pos = pos
+        self.lo = pos
 
     def rigid_tap(self, x, y, z):
         if self.suppress > 0:
@@ -218,9 +218,9 @@ class BaseCanon(object):
 
         self.first_move = False
         pos = self.rotate_and_translate(x, y, z, 0, 0, 0, 0, 0, 0)[:3]
-        pos += self.last_pos[3:]
+        pos += self.lo[3:]
 
-        self.add_path_point('feed', self.last_pos, pos)
+        self.add_path_point('feed', self.lo, pos)
 
     def set_plane(self, plane):
         self.plane = plane
@@ -233,7 +233,7 @@ class BaseCanon(object):
         self.in_arc = True
         try:
             # this self.lo goes straight into the c code, cannot be changed
-            self.lo = tuple(self.last_pos)
+            self.lo = tuple(self.lo)
             segs = gcode.arc_to_segments(self, end_x, end_y, center_x, center_y,
                                          rot, end_z, a, b, c, u, v, w, self.arcdivision)
             self.straight_arcsegments(segs)
@@ -242,11 +242,11 @@ class BaseCanon(object):
 
     def straight_arcsegments(self, segs):
         self.first_move = False
-        last_pos = self.last_pos
+        lo = self.lo
         for pos in segs:
-            self.add_path_point('arcfeed', last_pos, pos)
-            last_pos = pos
-        self.last_pos = last_pos
+            self.add_path_point('arcfeed', lo, pos)
+            lo = pos
+        self.lo = lo
 
     def straight_feed(self, x, y, z, a, b, c, u, v, w):
         if self.suppress > 0:
@@ -255,8 +255,8 @@ class BaseCanon(object):
         self.first_move = False
         pos = self.rotate_and_translate(x, y, z, a, b, c, u, v, w)
 
-        self.add_path_point('feed', self.last_pos, pos)
-        self.last_pos = pos
+        self.add_path_point('feed', self.lo, pos)
+        self.lo = pos
 
     straight_probe = straight_feed
 
@@ -264,14 +264,14 @@ class BaseCanon(object):
         if self.suppress > 0:
             return
 
-        self.add_path_point('user', self.last_pos, self.last_pos)
+        self.add_path_point('user', self.lo, self.lo)
 
     def dwell(self, arg):
         if self.suppress > 0:
             return
 
         self.dwell_time += arg
-        self.add_path_point('dwell', self.last_pos, self.last_pos)
+        self.add_path_point('dwell', self.lo, self.lo)
 
     def get_external_angular_units(self):
         return 1.0
